@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MAURI">
+    
+    <title>EMPRENDE CON MAURI | Mochilas Importadas de Alta Calidad en Bolivia</title>
+    <meta name="description" content="Importadora directa de mochilas escolares, ejecutivas, de viaje, deportivas y outdoor. Envíos a todo Bolivia.">
+    <meta name="keywords" content="mochilas Bolivia, mochilas importadas, EMPRENDE CON MAURI">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://emprendeconmauri.com">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="EMPRENDE CON MAURI | Mochilas Premium">
+    <meta property="og:description" content="Mochilas importadas de alta calidad. Envíos a todo Bolivia.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1200">
+    <meta property="og:url" content="https://emprendeconmauri.com">
+    
+    <!-- 👇 CAMBIO: Favicon con imagen -->
+    <link rel="icon" type="image/png" href="./assets/logo.png">
+    <link rel="apple-touch-icon" href="./assets/logo.png">
+    
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../shared/css/styles.css">
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "EMPRENDE CON MAURI",
+        "description": "Importador directo de mochilas de alta calidad en Bolivia",
+        "url": "https://emprendeconmauri.com",
+        "telephone": "+59167835835",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Av. Bush, Zona Norte",
+            "addressLocality": "Santa Cruz de la Sierra",
+            "addressCountry": "BO"
+        },
+        "openingHours": "Mo-Sa 09:00-19:00"
+    }
+    </script>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="announcement">🚚 Envío gratis desde 2500 Bs</div>
+        <div class="header-row header-mobile">
+            <!-- 👇 CAMBIO: Logo como imagen -->
+            <button class="logo-btn" onclick="App.go('home')">
+                <img src="./assets/logo.png" alt="EMPRENDE CON MAURI" class="logo-img">
+            </button>
+            <div class="search-sticky">
+                <i class="fas fa-search"></i>
+                <input type="search" id="search-mobile" placeholder="Buscar..." autocomplete="off">
+            </div>
+            <button class="icon-btn" onclick="App.openCart()">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge" id="cart-badge">0</span>
+            </button>
+        </div>
+        <div class="header-desktop">
+            <!-- 👇 CAMBIO: Logo como imagen -->
+            <button class="logo-btn logo-left" onclick="App.go('home')">
+                <img src="./assets/logo.png" alt="EMPRENDE CON MAURI" class="logo-img logo-desktop">
+            </button>
+            <nav class="desktop-nav">
+                <button onclick="App.go('home')" data-nav="home">Inicio</button>
+                <button onclick="App.go('shop')" data-nav="shop">Tienda</button>
+                <button onclick="App.go('ofertas')" class="nav-ofertas"> Ofertas</button>
+                <button onclick="App.go('about')" data-nav="about">Nosotros</button>
+            </nav>
+            <div class="header-right">
+                <div class="search-sticky">
+                    <i class="fas fa-search"></i>
+                    <input type="search" id="search-desktop" placeholder="Buscar mochilas..." autocomplete="off">
+                </div>
+                <button class="icon-btn" onclick="App.openCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cart-badge-desk">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <button class="menu-toggle mobile-only" id="menuToggle" onclick="App.toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="overlay-dark" id="overlayDark" onclick="App.closeMenu()"></div>
+
+    <aside class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <h3>Menú</h3>
+            <button class="side-menu-close" onclick="App.closeMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="side-menu-body">
+            <div class="menu-section">
+                <div class="menu-section-title">Navegación</div>
+                <div class="menu-item" onclick="App.go('home'); App.closeMenu();">
+                    <i class="fas fa-home"></i><strong>Inicio</strong>
+                </div>
+                <div class="menu-item" onclick="App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-store"></i><strong>Tienda</strong>
+                </div>
+                <div class="menu-item" onclick="App.go('ofertas'); App.closeMenu();">
+                    <i class="fas fa-fire" style="color:var(--danger);"></i>
+                    <strong style="color:var(--danger);">Ofertas</strong>
+                </div>
+                <div class="menu-item" onclick="App.go('about'); App.closeMenu();">
+                    <i class="fas fa-info-circle"></i><strong>Nosotros</strong>
+                </div>
+            </div>
+            <div class="menu-section">
+                <div class="menu-section-title">Categorías</div>
+                <div class="menu-item" onclick="App.filter('all'); App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-th-large"></i><strong>Todas</strong>
+                </div>
+                <div class="menu-item" onclick="App.filter('escolar'); App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-book"></i><strong>Escolar</strong>
+                </div>
+                <div class="menu-item" onclick="App.filter('viaje'); App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-plane"></i><strong>Viaje</strong>
+                </div>
+                <div class="menu-item" onclick="App.filter('deportiva'); App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-dumbbell"></i><strong>Deportiva</strong>
+                </div>
+                <div class="menu-item" onclick="App.filter('ejecutiva'); App.go('shop'); App.closeMenu();">
+                    <i class="fas fa-briefcase"></i><strong>Ejecutiva</strong>
+                </div>
+            </div>
+            <div class="menu-section">
+                <div class="menu-section-title">Legal</div>
+                <div class="menu-item" onclick="App.go('privacy'); App.closeMenu();">
+                    <i class="fas fa-shield-alt"></i><strong>Política de privacidad</strong>
+                </div>
+            </div>
+            <div class="menu-section">
+                <div class="menu-section-title">Contacto</div>
+                <div class="menu-item" onclick="App.whatsapp(); App.closeMenu();">
+                    <i class="fab fa-whatsapp" style="color:var(--wa);"></i><strong>WhatsApp</strong>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="cart-overlay" id="cartOverlay" onclick="App.closeCart()"></div>
+    <aside class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-bag"></i> Mi Bolsa</h2>
+            <button class="cart-close" onclick="App.closeCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer" id="cartFooter"></div>
+    </aside>
+
+    <main id="view-home" class="view active">
+        <div class="hero animate-in">
+            <p>Importación directa</p>
+            <h1>Tu próxima aventura empieza aquí</h1>
+            <p>Mochilas importadas de alta calidad</p>
+        </div>
+        <div class="section-header animate-in">
+            <div><h2> Ofertas</h2><span>Promociones activas</span></div>
+            <button class="link-btn" onclick="App.go('ofertas')">Ver todo</button>
+        </div>
+        <div class="grid" id="home-ofertas"></div>
+        <div class="section-header animate-in"><div><h2>Categorías</h2></div></div>
+        <div class="cats-grid" id="home-cats"></div>
+        <div class="section-header animate-in"><div><h2>Novedades</h2></div></div>
+        <div class="grid" id="home-featured"></div>
+    </main>
+
+    <main id="view-shop" class="view">
+        <div class="filters-sticky">
+            <div class="filters-scroll" id="shop-filters"></div>
+        </div>
+        <div class="grid" id="shop-grid"></div>
+    </main>
+
+    <main id="view-ofertas" class="view">
+        <div class="section-header">
+            <div><h2 style="color:var(--danger);">🔥 Ofertas Especiales</h2><span>¡Aprovecha!</span></div>
+        </div>
+        <div class="grid" id="ofertas-grid"></div>
+    </main>
+
+    <main id="view-product" class="view">
+        <div class="pd-topbar mobile-only">
+            <button class="icon-btn" onclick="App.closeProduct()" style="width:36px;height:36px;"><i class="fas fa-arrow-left"></i></button>
+            <button class="icon-btn" onclick="App.openCart()" style="width:36px;height:36px;">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge" id="cart-badge-pd">0</span>
+            </button>
+        </div>
+        <div class="pd-page-wrap">
+            <div class="pd-gallery">
+                <img class="pd-main-img" id="pd-main-img" src="" alt="">
+                <div class="pd-thumbs" id="pd-thumbs"></div>
+            </div>
+            <div class="pd-info">
+                <div class="pd-breadcrumb">Tienda / <span id="pd-cat">ESCOLAR</span></div>
+                <h1 id="pd-name"></h1>
+                <div class="pd-sku">SKU: <code id="pd-sku"></code></div>
+                <div class="pd-price" id="pd-price"></div>
+                <div class="pd-stock" id="pd-stock"></div>
+                <div class="opt-label">Color</div>
+                <div class="colors" id="pd-colors"></div>
+                <div class="pd-actions">
+                    <button class="btn-add" id="pd-btn-add" onclick="App.addToCart()">
+                        <i class="fas fa-shopping-bag"></i> AÑADIR A LA BOLSA
+                    </button>
+                    <button class="btn-wa-pd" onclick="App.whatsappProduct()">
+                        <i class="fab fa-whatsapp"></i> CONSULTAR POR WHATSAPP
+                    </button>
+                </div>
+                
+                <div class="pd-share-actions">
+                    <button class="btn-share" onclick="App.shareProduct()">
+                        <i class="fas fa-share-alt"></i> Compartir
+                    </button>
+                    <button class="btn-wishlist-pd" id="btn-wishlist-pd" onclick="App.toggleWishlistCurrent()">
+                        <i class="far fa-heart"></i> <span id="wishlist-text">Guardar</span>
+                    </button>
+                </div>
+
+                <div class="pd-tabs">
+                    <button class="pd-tab active" onclick="App.switchTab('desc', this)">Descripción</button>
+                    <button class="pd-tab" onclick="App.switchTab('details', this)">Detalles</button>
+                    <button class="pd-tab" onclick="App.switchTab('ship', this)">Envío</button>
+                </div>
+                <div class="pd-panel active" id="panel-desc"></div>
+                <div class="pd-panel" id="panel-details"></div>
+                <div class="pd-panel" id="panel-ship"></div>
+
+                <div class="related-section">
+                    <h3><i class="fas fa-th-large"></i> También te puede interesar</h3>
+                    <div class="related-grid" id="related-products"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-about" class="view">
+        <div style="background:linear-gradient(135deg, var(--primary) 0%, #2d2d2d 100%);color:#fff;padding:60px 20px;text-align:center;">
+            <h1 style="font-size:2rem;margin-bottom:12px;">IMPORTACION DIRECTA</h1>
+            <p style="font-size:0.9rem;opacity:0.9;">Mochilas de calidad · Santa Cruz, Bolivia</p>
+        </div>
+        <div style="max-width:800px;margin:0 auto;padding:32px 20px;">
+            <!-- Historia -->
+            <div style="margin-bottom:36px;">
+                <h3 style="font-size:1.3rem;margin-bottom:16px;color:var(--primary);display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-history" style="color:var(--accent);"></i>Nuestra Historia
+                </h3>
+                <div id="aboutHistory">
+                    <p style="color:var(--dim);line-height:1.8;margin-bottom:16px;font-size:0.95rem;">
+                        Somos una importadora directa de mochilas con base en Santa Cruz de la Sierra, Bolivia.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Misión -->
+            <div style="margin-bottom:36px;">
+                <h3 style="font-size:1.3rem;margin-bottom:16px;color:var(--primary);display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-bullseye" style="color:var(--accent);"></i>Misión
+                </h3>
+                <div id="aboutMission">
+                    <p style="color:var(--dim);line-height:1.8;font-size:0.95rem;">
+                        Ser la importadora de mochilas líder en Bolivia.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tiendas Autorizadas -->
+            <div style="margin-bottom:36px;">
+                <h3 style="font-size:1.3rem;margin-bottom:16px;color:var(--primary);display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-store" style="color:var(--accent);"></i>Dónde Encontrar Nuestros Productos
+                </h3>
+                <p style="color:var(--dim);line-height:1.8;margin-bottom:20px;font-size:0.95rem;">
+                    Trabajamos con tiendas locales autorizadas en todo Bolivia. Visítalas y conoce nuestra variedad de productos.
+                </p>
+                <div id="authorizedStores" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+                    <!-- Las tiendas se cargan dinámicamente -->
+                </div>
+            </div>
+            
+            <!-- Contacto -->
+            <div style="text-align:center;padding:32px 20px;background:var(--surface);border-radius:10px;margin-top:32px;">
+                <h3 style="font-size:1.2rem;margin-bottom:12px;color:var(--primary);">¿Tienes preguntas?</h3>
+                <p style="color:var(--dim);margin-bottom:20px;font-size:0.95rem;">Estamos aquí para ayudarte.</p>
+                <button onclick="App.whatsapp()" style="background:var(--wa);color:#fff;border:none;padding:14px 32px;border-radius:8px;font-weight:700;font-size:0.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:10px;">
+                    <i class="fab fa-whatsapp"></i>Contactar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer desktop-only">
+        <div class="footer-main">
+            <div class="footer-section">
+                <h4 style="font-size: 1.1rem; margin-bottom: 16px; color: var(--primary);">EMPRENDE CON MAURI</h4>
+                <p style="font-size: 0.85rem; color: var(--dim); line-height: 1.6; margin-bottom: 16px;">
+                    Importadores directos de mochilas de alta calidad.
+                </p>
+                <div style="display: flex; gap: 12px;">
+                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; color: var(--primary); text-decoration: none;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; color: var(--primary); text-decoration: none;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/59167835835" style="width: 36px; height: 36px; border-radius: 50%; background: var(--wa); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none;">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 style="font-size: 0.9rem; margin-bottom: 16px; color: var(--primary);">Enlaces rápidos</h4>
+                <ul>
+                    <li style="margin-bottom: 10px;"><a href="#" onclick="App.go('home'); return false;">Inicio</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" onclick="App.go('shop'); return false;">Tienda</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" onclick="App.go('ofertas'); return false;">Ofertas</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" onclick="App.go('about'); return false;">Nosotros</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 style="font-size: 0.9rem; margin-bottom: 16px; color: var(--primary);">Atención al cliente</h4>
+                <ul>
+                    <li style="margin-bottom: 10px;"><a href="#" onclick="App.go('privacy'); return false;">Política de privacidad</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#">Política de envío</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#">Garantía</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 style="font-size: 0.9rem; margin-bottom: 16px; color: var(--primary);">Contacto</h4>
+                <ul>
+                    <li style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
+                        <i class="fas fa-map-marker-alt" style="color: var(--accent); margin-top: 3px;"></i>
+                        <span style="color: var(--dim); font-size: 0.85rem;">Av. Bush, Zona Norte<br>Santa Cruz de la Sierra, Bolivia</span>
+                    </li>
+                    <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-phone" style="color: var(--accent);"></i>
+                        <span style="color: var(--dim); font-size: 0.85rem;">+591 67835835</span>
+                    </li>
+                    <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-clock" style="color: var(--accent);"></i>
+                        <span style="color: var(--dim); font-size: 0.85rem;">Lun - Sáb: 9:00 - 19:00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-legal">
+                    <a href="#" onclick="App.go('privacy'); return false;">Política de privacidad</a>
+                    <a href="#">Términos y condiciones</a>
+                </div>
+                <div class="footer-copy">
+                    <p style="color: var(--muted); font-size: 0.8rem; margin: 0;">
+                        © <span id="footer-year"></span> EMPRENDE CON MAURI. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="footer-dev">
+                    <p style="color: var(--muted); font-size: 0.75rem; margin: 0;">
+                        Desarrollado por <a href="https://keystudio.bo" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none; font-weight: 600;">KEY STUDIO</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <footer class="footer-mobile mobile-only">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--primary);">EMPRENDE CON MAURI</h4>
+            <p style="font-size: 0.85rem; color: var(--dim);">Mochilas de calidad · Santa Cruz, Bolivia</p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+            <a href="#" onclick="App.go('privacy'); return false;" style="color: var(--dim); text-decoration: none; font-size: 0.8rem;">Privacidad</a>
+            <a href="#" style="color: var(--dim); text-decoration: none; font-size: 0.8rem;">Términos</a>
+        </div>
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid var(--border);">
+            <p style="color: var(--muted); font-size: 0.75rem; margin-bottom: 8px;">
+                © <span id="footer-year-mobile"></span> EMPRENDE CON MAURI
+            </p>
+            <p style="color: var(--muted); font-size: 0.7rem;">
+                Desarrollado por <a href="https://keystudio.bo" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none; font-weight: 600;">KEY STUDIO</a>
+            </p>
+        </div>
+    </footer>
+
+    <div class="wa-float-bottom">
+        <a href="https://wa.me/59167835835" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <nav class="bottom-nav">
+        <button class="tab active" onclick="App.go('home')"><i class="fas fa-home"></i><span>Inicio</span></button>
+        <button class="tab" onclick="App.go('shop')"><i class="fas fa-store"></i><span>Tienda</span></button>
+        <button class="tab tab-ofertas" onclick="App.go('ofertas')">
+            <div class="ofertas-badge"><i class="fas fa-fire" style="color:#fff;"></i></div>
+            <span>Ofertas</span>
+        </button>
+        <button class="tab" onclick="App.go('about')"><i class="fas fa-info-circle"></i><span>Nosotros</span></button>
+        <button class="tab" onclick="App.openCart()"><i class="fas fa-shopping-bag"></i><span>Bolsa</span></button>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        import { BUSINESS_CONFIG } from './config.js';
+        import { App } from '../../shared/js/app.js';
+        
+        // Inicializar con la configuración del negocio
+        App.init(BUSINESS_CONFIG);
+    </script>
+</body>
+</html>
