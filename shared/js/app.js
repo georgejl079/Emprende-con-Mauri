@@ -2,9 +2,10 @@
 import { PLATFORM_CONFIG, optimizeImage } from './config.js'
 import { LazyLoader, Animations, BackToTop, registerServiceWorker } from './utils.js'
 import { renderProductCard, renderCategoryCard } from './components.js'
+import { initSupabase, fetchProducts, fetchCategories } from './supabase.js'
 
-// Datos locales (después vendrán de Supabase)
-const products = [
+// Datos locales (fallback si Supabase no está disponible)
+const DEFAULT_PRODUCTS = [
     {
         id: 1, sku: 'RUT-ESC-001', name: 'Mochila Escolar Urban Pro', category: 'Escolar',
         price: 180, oldPrice: null, discount: null, cat: 'escolar',
@@ -12,7 +13,7 @@ const products = [
         colors: [{ hex: '#1a1a1a', name: 'Negro' }, { hex: '#1e3a5f', name: 'Azul Marino' }, { hex: '#8b0000', name: 'Rojo' }],
         description: 'Mochila escolar de alta resistencia con tela Oxford 600D impermeabilizada. Diseño ergonómico con correas acolchadas ajustables y espalda ventilada. 3 compartimentos principales, bolsillo frontal con organizador, 2 bolsillos laterales para botella y porta laptop hasta 15.6".',
         details: 'Material: Oxford 600D impermeable\nCapacidad: 30 litros\nCompartimentos: 3 principales + 1 frontal\nLaptop: Hasta 15.6"\nPeso: 650 g\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis en compras desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía de 30 días por defectos de fábrica'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía de 30 días por defectos de fábrica'
     },
     {
         id: 2, sku: 'RUT-VIA-003', name: 'Mochila Viaje Explorer 45L', category: 'Viaje',
@@ -21,7 +22,7 @@ const products = [
         colors: [{ hex: '#2d5016', name: 'Verde Militar' }, { hex: '#1a1a1a', name: 'Negro' }, { hex: '#1e3a5f', name: 'Azul' }],
         description: 'Mochila de viaje de 45 litros con apertura tipo maleta. Perfecta para viajes de aventura. Tela ripstop resistente al desgarro con tratamiento impermeable. Incluye funda para lluvia.',
         details: 'Material: Ripstop nylon impermeable\nCapacidad: 45 litros\nApertura: Tipo maleta 180°\nExtras: Funda de lluvia incluida\nCinturón: Lumbar acolchado\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis en compras desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía de 30 días'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía de 30 días'
     },
     {
         id: 3, sku: 'RUT-DEP-005', name: 'Mochila Deportiva Gym Fit', category: 'Deportiva',
@@ -30,7 +31,7 @@ const products = [
         colors: [{ hex: '#1a1a1a', name: 'Negro' }, { hex: '#ff6600', name: 'Naranja' }, { hex: '#1e3a5f', name: 'Azul' }],
         description: 'Mochila deportiva con compartimento separado para zapatos. Diseño compacto pero espacioso. Tela resistente al agua con costuras selladas.',
         details: 'Material: Nylon resistente al agua\nCapacidad: 25 litros\nCompartimento: Zapatos/ropa mojada\nBolsillo: Húmedo separado\nPeso: 480 g\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía 30 días'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía 30 días'
     },
     {
         id: 4, sku: 'RUT-INF-006', name: 'Mochila Infantil Kids Fun', category: 'Infantil',
@@ -39,7 +40,7 @@ const products = [
         colors: [{ hex: '#ff69b4', name: 'Rosa' }, { hex: '#4169e1', name: 'Azul Rey' }, { hex: '#32cd32', name: 'Verde' }],
         description: 'Mochila infantil con diseño ergonómico especial para niños de 3 a 8 años. Espalda acolchada transpirable. Diseños coloridos.',
         details: 'Material: Poliéster impermeable\nCapacidad: 12 litros\nEdad: 3 a 8 años\nEspalda: Acolchada transpirable\nPeso: 320 g\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía 30 días'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía 30 días'
     },
     {
         id: 5, sku: 'RUT-EJE-007', name: 'Mochila Ejecutiva Business', category: 'Ejecutiva',
@@ -48,7 +49,7 @@ const products = [
         colors: [{ hex: '#1a1a1a', name: 'Negro' }, { hex: '#4a4a4a', name: 'Gris Oscuro' }],
         description: 'Mochila ejecutiva premium con puerto USB de carga externo. Compartimento acolchado para laptop hasta 15.6", bolsillo anti-robo en la espalda.',
         details: 'Material: Cuero sintético premium\nCapacidad: 22 litros\nLaptop: Hasta 15.6"\nExtra: Puerto USB integrado\nBolsillo: Anti-robo trasero\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía 30 días'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía 30 días'
     },
     {
         id: 6, sku: 'RUT-OUT-008', name: 'Mochila Outdoor Trekking 50L', category: 'Outdoor',
@@ -57,16 +58,20 @@ const products = [
         colors: [{ hex: '#2d5016', name: 'Verde Bosque' }, { hex: '#8b4513', name: 'Marrón' }, { hex: '#1a1a1a', name: 'Negro' }],
         description: 'Mochila de trekking profesional con sistema de ventilación dorsal. Estructura interna de aluminio liviana. Ideal para rutas de varios días.',
         details: 'Material: Nylon 420D ripstop\nCapacidad: 50 litros\nSistema: Ventilación dorsal\nEstructura: Aluminio liviano\nHidratación: Compatible (no incluida)\nOrigen: Importación directa',
-        shipping: 'Envíos a todo Bolivia. Pedidos procesados en 24-48 h.\n\n• Gratis desde 2500 Bs.\n• Seguimiento por WhatsApp\n• Garantía 30 días'
+        shipping: 'Envíos a nivel nacional. Pedidos procesados en 24-48 h.\n\n• Seguimiento por WhatsApp\n• Garantía 30 días'
     }
 ]
 
-const categories = [
+const DEFAULT_CATEGORIES = [
     { id: 'escolar', name: 'Escolar', img: 'https://images.unsplash.com/photo-1580087256394-dc596e1c8f4f?w=400' },
     { id: 'viaje', name: 'Viaje', img: 'https://images.unsplash.com/photo-1622260614153-03223fb72052?w=400' },
     { id: 'deportiva', name: 'Deportiva', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400' },
     { id: 'ejecutiva', name: 'Ejecutiva', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400' }
 ]
+
+// Variables que se cargarán desde Supabase o usarán defaults
+let products = []
+let categories = []
 
 export const App = {
     cart: JSON.parse(localStorage.getItem('ruta_cart') || '[]'),
@@ -77,24 +82,88 @@ export const App = {
     searchTimeout: null,
     businessConfig: null,
 
-    init(businessConfig) {
+    async init(businessConfig) {
         this.businessConfig = businessConfig
         this.setupSearch()
+        this.setupHistory()
+
+        // Inicializar Supabase
+        const supabaseClient = initSupabase()
+
+        // Cargar datos desde Supabase o usar defaults
+        if (supabaseClient) {
+            try {
+                console.log('🔄 Cargando datos desde Supabase...')
+                const businessId = 1 // ID del negocio RUTA Importadora
+
+                const [dbProducts, dbCategories] = await Promise.all([
+                    fetchProducts(businessId),
+                    fetchCategories(businessId)
+                ])
+
+                if (dbProducts && dbProducts.length > 0) {
+                    // Transformar datos de Supabase al formato esperado
+                    products = dbProducts.map(p => ({
+                        id: p.id,
+                        sku: p.sku,
+                        name: p.name,
+                        category: p.category,
+                        cat: p.cat || p.category.toLowerCase(),
+                        price: p.price,
+                        oldPrice: p.old_price,
+                        discount: p.discount,
+                        img: p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/600',
+                        colors: p.colors || [{ hex: '#1a1a1a', name: 'Negro' }],
+                        description: p.description || '',
+                        details: p.details || '',
+                        shipping: p.shipping || 'Envíos a nivel nacional'
+                    }))
+                    console.log(`✅ ${products.length} productos cargados desde Supabase`)
+                } else {
+                    products = DEFAULT_PRODUCTS
+                    console.log('⚠️ Usando productos locales (Supabase vacío)')
+                }
+
+                if (dbCategories && dbCategories.length > 0) {
+                    categories = dbCategories.map(c => ({
+                        id: c.name.toLowerCase(),
+                        name: c.name,
+                        img: c.img || 'https://via.placeholder.com/400'
+                    }))
+                    console.log(`✅ ${categories.length} categorías cargadas desde Supabase`)
+                } else {
+                    categories = DEFAULT_CATEGORIES
+                    console.log('⚠️ Usando categorías locales (Supabase vacío)')
+                }
+            } catch (error) {
+                console.error('❌ Error cargando desde Supabase:', error)
+                products = DEFAULT_PRODUCTS
+                categories = DEFAULT_CATEGORIES
+            }
+        } else {
+            console.log('⚠️ Supabase no disponible - usando datos locales')
+            products = DEFAULT_PRODUCTS
+            categories = DEFAULT_CATEGORIES
+        }
+
         this.renderHome()
         this.renderShop()
         this.renderOfertas()
         this.updateCartBadge()
         this.updateFooterYear()
         this.updateWishlistBadges()
-        
+
         LazyLoader.init()
         Animations.init()
         BackToTop.init()
         registerServiceWorker()
-        
+
         // Renderizar tiendas autorizadas
         this.renderAuthorizedStores()
-        
+
+        // Restaurar vista desde hash al recargar
+        this.restoreFromHash()
+
         setTimeout(() => {
             LazyLoader.observeNew(document.body)
         }, 100)
@@ -111,7 +180,7 @@ export const App = {
     setupSearch() {
         const searchMobile = document.getElementById('search-mobile')
         const searchDesktop = document.getElementById('search-desktop')
-        
+
         const handleSearch = (value) => {
             clearTimeout(this.searchTimeout)
             this.searchTimeout = setTimeout(() => this.search(value), 300)
@@ -128,6 +197,39 @@ export const App = {
             searchDesktop.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') { e.preventDefault(); this.search(e.target.value); }
             })
+        }
+    },
+
+    setupHistory() {
+        window.addEventListener('popstate', (event) => {
+            if (event.state) {
+                if (event.state.productId) {
+                    this.openProduct(event.state.productId)
+                } else if (event.state.view) {
+                    this.go(event.state.view)
+                }
+            } else {
+                // Si no hay estado, ir a home
+                this.go('home')
+            }
+        })
+    },
+
+    restoreFromHash() {
+        const hash = window.location.hash
+        if (hash) {
+            if (hash.startsWith('#product-')) {
+                const productId = parseInt(hash.replace('#product-', ''))
+                if (!isNaN(productId)) {
+                    setTimeout(() => this.openProduct(productId), 100)
+                }
+            } else {
+                const viewName = hash.replace('#', '')
+                const validViews = ['home', 'shop', 'ofertas', 'about', 'product']
+                if (validViews.includes(viewName)) {
+                    setTimeout(() => this.go(viewName), 100)
+                }
+            }
         }
     },
 
@@ -160,9 +262,14 @@ export const App = {
         }
     },
 
-    go(view) {
+    go(view, productId = null) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'))
-        document.getElementById('view-' + view).classList.add('active')
+        const targetView = document.getElementById('view-' + view)
+        if (!targetView) {
+            console.error(`Vista view-${view} no encontrada`)
+            return
+        }
+        targetView.classList.add('active')
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
         document.querySelectorAll('.desktop-nav button').forEach(b => b.classList.remove('active'))
         if (view !== 'ofertas' && view !== 'privacy') {
@@ -172,7 +279,14 @@ export const App = {
         const activeNav = document.querySelector(`.desktop-nav button[data-nav="${view}"]`)
         if (activeNav) activeNav.classList.add('active')
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        
+
+        // Actualizar URL con hash para navegación
+        if (productId) {
+            history.pushState({ view, productId }, '', `#product-${productId}`)
+        } else {
+            history.pushState({ view }, '', `#${view}`)
+        }
+
         setTimeout(() => Animations.init(), 50)
     },
 
@@ -293,22 +407,26 @@ export const App = {
 
     openProduct(id) {
         const p = products.find(x => x.id === id)
-        if (!p) return
+        if (!p) {
+            console.error(`Producto con ID ${id} no encontrado`)
+            this.go('shop')
+            return
+        }
         this.product = p
         this.selColor = p.colors[0]
         const isOferta = this.isOferta(p)
-        
+
         document.body.classList.add('product-open')
-        
-        history.replaceState(null, '', `${window.location.origin}${window.location.pathname}#product-${p.id}`)
-        
+
+        history.pushState({ view: 'product', productId: id }, '', `#product-${p.id}`)
+
         this.updateMetaTags(p)
-        
+
         document.getElementById('pd-main-img').src = optimizeImage(p.img, 900)
-        document.getElementById('pd-thumbs').innerHTML = [p.img, p.img, p.img].map((src, i) => 
+        document.getElementById('pd-thumbs').innerHTML = [p.img, p.img, p.img].map((src, i) =>
             `<button class="pd-thumb${i===0?' active':''}" onclick="App.setImage(this,'${optimizeImage(src, 900)}')"><img src="${optimizeImage(src, 150)}" alt=""></button>`
         ).join('')
-        
+
         document.getElementById('pd-cat').textContent = p.category.toUpperCase()
         document.getElementById('pd-name').textContent = p.name
         document.getElementById('pd-sku').textContent = p.sku
@@ -343,7 +461,7 @@ export const App = {
         // Envío (formateado con saltos de línea)
         document.getElementById('panel-ship').innerHTML = p.shipping 
             ? `<p>${p.shipping.replace(/\n/g, '<br>')}</p>`
-            : '<p>Envíos a todo Bolivia. Pedidos procesados en 24-48 h.</p><ul style="margin-top:10px;padding-left:18px;"><li>Gratis desde 2500 Bs.</li><li>Seguimiento por WhatsApp</li><li>Garantía 30 días</li></ul>'
+            : '<p>Envíos a nivel nacional. Pedidos procesados en 24-48 h.</p><ul style="margin-top:10px;padding-left:18px;"><li>Seguimiento por WhatsApp</li><li>Garantía 30 días</li></ul>'
         
         document.getElementById('pd-colors').innerHTML = p.colors.map((c, i) => 
             `<button class="color-btn${i===0?' active':''}" style="background:${c.hex}" title="${c.name}" onclick="App.pickColor(${i}, this)"></button>`
@@ -384,7 +502,7 @@ export const App = {
 
     closeProduct() {
         document.body.classList.remove('product-open')
-        history.replaceState(null, '', `${window.location.origin}${window.location.pathname}`)
+        history.pushState({ view: 'shop' }, '', '#shop')
         this.go('shop')
     },
 
@@ -506,7 +624,7 @@ export const App = {
         }).join('')
 
         const hasConsultar = itemsConsultar > 0
-        const shipping = subtotalOfertas >= 2500 ? 0 : (subtotalOfertas > 0 ? 25 : 0)
+        const shipping = 0
         const total = subtotalOfertas + shipping
 
         footerEl.innerHTML = `
@@ -516,7 +634,7 @@ export const App = {
                     <span class="value">${hasConsultar ? 'Ver detalle' : 'Bs. ' + subtotalOfertas}</span>
                 </div>
                 ${subtotalOfertas > 0 ? `<div class="cart-summary-row"><span class="label">Subtotal ofertas</span><span class="value">Bs. ${subtotalOfertas}</span></div>` : ''}
-                ${subtotalOfertas > 0 ? `<div class="cart-summary-row"><span class="label">Envío</span><span class="value" style="color:${shipping === 0 ? '#059669' : 'var(--text)'}">${shipping === 0 ? '✓ GRATIS' : 'Bs. ' + shipping}</span></div>` : ''}
+                ${subtotalOfertas > 0 ? `<div class="cart-summary-row"><span class="label">Envío</span><span class="value" style="color:#059669;">A nivel nacional</span></div>` : ''}
                 ${hasConsultar ? `<div class="cart-summary-row"><span class="label" style="color:var(--accent);"><i class="fas fa-info-circle"></i> ${itemsConsultar} producto(s) a consultar precio</span><span class="value" style="color:var(--accent);">—</span></div>` : ''}
                 ${subtotalOfertas > 0 ? `<div class="cart-summary-row total"><span class="label">Total confirmado</span><span class="value">Bs. ${total}</span></div>` : ''}
             </div>
@@ -568,10 +686,10 @@ export const App = {
         msg += `• Unidades totales: ${this.cart.reduce((sum, item) => sum + item.qty, 0)}\n`
         
         if (totalConfirmado > 0) {
-            const shipping = totalConfirmado >= 2500 ? 0 : 25
+            const shipping = 0
             const total = totalConfirmado + shipping
             msg += `• Subtotal confirmado: Bs. ${totalConfirmado}\n`
-            msg += `• Envío: ${shipping === 0 ? 'GRATIS ✓' : 'Bs. ' + shipping}\n`
+            msg += `• Envío: A nivel nacional\n`
             msg += `• *TOTAL CONFIRMADO: Bs. ${total}*\n`
         }
         
