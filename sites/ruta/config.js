@@ -24,7 +24,7 @@ export const BUSINESS_CONFIG = {
         facebook: 'Emprende con Mauri',
         whatsapp: 'https://wa.me/59167835835'
     },
-    announcement: '🚚 Envío gratis desde 2500 Bs',
+    announcement: '🚚 Envíos a nivel nacional',
     hero: {
         subtitle: 'Importación directa',
         title: 'Tu próxima aventura empieza aquí',
